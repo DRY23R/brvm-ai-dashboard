@@ -77,70 +77,51 @@
     <h1>BRVM AI</h1>
     <div class="subtitle">Trading & Investment Scanner</div>
 
-    <div class="card">
-      <div>SEMC</div>
-      <div class="score green">81/100</div>
-      <div class="row">
-        <span>Cours</span>
-        <span>1 490 FCFA</span>
-      </div>
-      <div class="row">
-        <span>Variation</span>
-        <span>+2,76 %</span>
-      </div>
-      <div class="row">
-        <span>Liquidité</span>
-        <span>95/100</span>
-      </div>
-      <div class="status">Historique en construction</div>
-    </div>
-
-    <div class="card">
-      <div>SDSC</div>
-      <div class="score green">77/100</div>
-      <div class="row">
-        <span>Cours</span>
-        <span>2 700 FCFA</span>
-      </div>
-      <div class="row">
-        <span>Variation</span>
-        <span>+2,47 %</span>
-      </div>
-      <div class="row">
-        <span>Liquidité</span>
-        <span>89/100</span>
-      </div>
-      <div class="status">Historique en construction</div>
-    </div>
-
-    <div class="card">
-      <div>SNTS</div>
-      <div class="score yellow">75/100</div>
-      <div class="row">
-        <span>Cours</span>
-        <span>36 985 FCFA</span>
-      </div>
-      <div class="row">
-        <span>Variation</span>
-        <span>+2,74 %</span>
-      </div>
-      <div class="row">
-        <span>Liquidité</span>
-        <span>60/100</span>
-      </div>
-      <div class="status">Historique en construction</div>
-    </div>
+    <div id="cards-container"></div>
 
   </div>
 <script>
 fetch('dashboard.json')
   .then(response => response.json())
   .then(data => {
-    console.log(data);
+    const container = document.getElementById('cards-container');
+    container.innerHTML = '';
+
+    data.forEach(item => {
+      const scoreClass = item.score >= 77 ? 'green' : 'yellow';
+
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      card.innerHTML = `
+        <div>${item.symbol}</div>
+        <div class="score ${scoreClass}">${item.score}/100</div>
+
+        <div class="row">
+          <span>Cours</span>
+          <span>${item.price} FCFA</span>
+        </div>
+
+        <div class="row">
+          <span>Variation</span>
+          <span>${item.variation} %</span>
+        </div>
+
+        <div class="row">
+          <span>Liquidité</span>
+          <span>${item.liquidity}/100</span>
+        </div>
+
+        <div class="status">Données mises à jour automatiquement</div>
+      `;
+
+      container.appendChild(card);
+    });
   })
   .catch(error => {
-    console.error(error);
+    console.error('Erreur dashboard:', error);
   });
 </script>
 </body>
 </html>
+
