@@ -3,88 +3,307 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BRVM AI Dashboard</title>
+  <meta name="theme-color" content="#0b1020">
+
+  <title>BRVM AI — Trading & Investment Scanner</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       background: #0b1020;
-      color: white;
+      color: #ffffff;
     }
 
     .container {
       max-width: 900px;
-      margin: auto;
-      padding: 22px;
+      margin: 0 auto;
+      padding: 28px 20px 60px;
     }
 
     h1 {
-      margin-bottom: 6px;
-      font-size: 30px;
+      margin: 0 0 6px;
+      font-size: 32px;
+      letter-spacing: -0.5px;
     }
 
     .subtitle {
       color: #9ca3af;
-      margin-bottom: 28px;
       font-size: 18px;
+      margin-bottom: 18px;
+    }
+
+    .updated {
+      color: #6b7280;
+      font-size: 13px;
+      margin-bottom: 22px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .search {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 12px;
+      border: 1px solid #29304f;
+      background: #11172a;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .search::placeholder {
+      color: #6b7280;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .filter-btn {
+      border: 1px solid #29304f;
+      background: #151b2f;
+      color: #d1d5db;
+      padding: 9px 13px;
+      border-radius: 20px;
+      white-space: nowrap;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      background: #2b355c;
+      color: #ffffff;
+      border-color: #46558e;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .summary-box {
+      background: #11172a;
+      border: 1px solid #1d2540;
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .summary-number {
+      display: block;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+
+    .summary-label {
+      color: #8f98ab;
+      font-size: 12px;
     }
 
     .card {
+      position: relative;
       background: #151b2f;
-      border-radius: 18px;
+      border: 1px solid #1b2340;
+      border-radius: 20px;
       padding: 20px;
-      margin-bottom: 18px;
+      margin-bottom: 17px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .company-block {
+      min-width: 0;
+    }
+
+    .symbol-line {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .rank {
+      background: #242c49;
+      color: #aeb8d4;
+      padding: 4px 8px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 700;
     }
 
     .symbol {
-      font-size: 20px;
-      margin-bottom: 8px;
+      font-size: 21px;
+      font-weight: 500;
     }
 
-    .score {
-      font-size: 34px;
-      font-weight: 700;
-      margin-bottom: 18px;
+    .company-name {
+      margin-top: 5px;
+      color: #8f98ab;
+      font-size: 13px;
+      line-height: 1.3;
     }
 
-    .green {
+    .signal {
+      padding: 7px 10px;
+      border-radius: 14px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .3px;
+      flex-shrink: 0;
+    }
+
+    .signal-buy {
+      background: rgba(52, 211, 153, .14);
       color: #34d399;
     }
 
-    .yellow {
+    .signal-watch {
+      background: rgba(251, 191, 36, .14);
       color: #fbbf24;
+    }
+
+    .signal-avoid {
+      background: rgba(248, 113, 113, .14);
+      color: #f87171;
+    }
+
+    .score {
+      font-size: 37px;
+      font-weight: 750;
+      margin: 10px 0 18px;
+      letter-spacing: -1px;
+    }
+
+    .score-high {
+      color: #34d399;
+    }
+
+    .score-medium {
+      color: #fbbf24;
+    }
+
+    .score-low {
+      color: #f87171;
     }
 
     .row {
       display: flex;
       justify-content: space-between;
-      margin: 10px 0;
+      align-items: center;
+      gap: 20px;
+      margin: 11px 0;
       font-size: 17px;
       color: #d1d5db;
     }
 
-    .status {
-      display: inline-block;
-      margin-top: 14px;
-      padding: 8px 12px;
-      border-radius: 20px;
-      background: #29304f;
-      font-size: 13px;
-      color: #e5e7eb;
+    .value {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
     }
 
-    .updated {
-      color: #6b7280;
-      margin-bottom: 20px;
-      font-size: 13px;
+    .positive {
+      color: #34d399;
+    }
+
+    .negative {
+      color: #f87171;
+    }
+
+    .neutral {
+      color: #d1d5db;
+    }
+
+    .liquidity-badge {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .liq-high {
+      background: rgba(52, 211, 153, .12);
+      color: #34d399;
+    }
+
+    .liq-medium {
+      background: rgba(251, 191, 36, .12);
+      color: #fbbf24;
+    }
+
+    .liq-low {
+      background: rgba(248, 113, 113, .12);
+      color: #f87171;
+    }
+
+    .history {
+      margin-top: 15px;
+      padding-top: 13px;
+      border-top: 1px solid #242c49;
+      color: #737e96;
+      font-size: 12px;
+    }
+
+    .empty,
+    .error {
+      padding: 20px;
+      border-radius: 14px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .empty {
+      background: #151b2f;
+      color: #9ca3af;
     }
 
     .error {
-      background: #3f1d2b;
-      padding: 16px;
-      border-radius: 12px;
-      margin-top: 20px;
+      background: rgba(248, 113, 113, .12);
+      color: #fca5a5;
+    }
+
+    .footer-note {
+      margin-top: 26px;
+      color: #596277;
+      font-size: 11px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    @media (min-width: 700px) {
+      .toolbar {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .search {
+        flex: 1;
+      }
+
+      .filters {
+        flex-shrink: 0;
+      }
     }
   </style>
 </head>
@@ -99,105 +318,318 @@
       Trading & Investment Scanner
     </div>
 
-    <div id="updated"></div>
+    <div id="updated" class="updated">
+      Chargement des données…
+    </div>
+
+    <div class="toolbar">
+
+      <input
+        id="search"
+        class="search"
+        type="search"
+        placeholder="Rechercher une action…"
+        autocomplete="off"
+      >
+
+      <div class="filters">
+        <button class="filter-btn active" data-filter="ALL">Tous</button>
+        <button class="filter-btn" data-filter="ACHAT">Achat</button>
+        <button class="filter-btn" data-filter="SURVEILLER">Surveiller</button>
+        <button class="filter-btn" data-filter="EVITER">Éviter</button>
+      </div>
+
+    </div>
+
+    <div class="summary">
+      <div class="summary-box">
+        <span id="count-buy" class="summary-number">0</span>
+        <span class="summary-label">ACHAT</span>
+      </div>
+
+      <div class="summary-box">
+        <span id="count-watch" class="summary-number">0</span>
+        <span class="summary-label">SURVEILLER</span>
+      </div>
+
+      <div class="summary-box">
+        <span id="count-avoid" class="summary-number">0</span>
+        <span class="summary-label">ÉVITER</span>
+      </div>
+    </div>
 
     <div id="cards-container"></div>
+
+    <div class="footer-note">
+      Les signaux BRVM AI sont des indicateurs quantitatifs automatisés
+      basés sur les données disponibles. Ils ne constituent pas un conseil
+      financier personnalisé.
+    </div>
 
   </div>
 
   <script>
+    let allStocks = [];
+    let currentFilter = 'ALL';
+
+    function getSignal(score, liquidity) {
+      if (score >= 75 && liquidity >= 50) {
+        return 'ACHAT';
+      }
+
+      if (score >= 60) {
+        return 'SURVEILLER';
+      }
+
+      return 'EVITER';
+    }
+
+    function getSignalClass(signal) {
+      if (signal === 'ACHAT') return 'signal-buy';
+      if (signal === 'SURVEILLER') return 'signal-watch';
+      return 'signal-avoid';
+    }
+
+    function getScoreClass(score) {
+      if (score >= 75) return 'score-high';
+      if (score >= 60) return 'score-medium';
+      return 'score-low';
+    }
+
+    function getLiquidityClass(liquidity) {
+      if (liquidity >= 70) return 'liq-high';
+      if (liquidity >= 40) return 'liq-medium';
+      return 'liq-low';
+    }
+
+    function formatVariation(value) {
+      const number = Number(value || 0);
+      const sign = number > 0 ? '+' : '';
+
+      return `${sign}${number.toFixed(2)} %`;
+    }
+
+    function variationClass(value) {
+      const number = Number(value || 0);
+
+      if (number > 0) return 'positive';
+      if (number < 0) return 'negative';
+
+      return 'neutral';
+    }
+
+    function getCompanyName(item) {
+      return (
+        item.company_name ||
+        item.company ||
+        item.name ||
+        item.security_name ||
+        ''
+      );
+    }
+
+    function updateSummary(stocks) {
+      const buy = stocks.filter(item => item.signalCalculated === 'ACHAT').length;
+      const watch = stocks.filter(item => item.signalCalculated === 'SURVEILLER').length;
+      const avoid = stocks.filter(item => item.signalCalculated === 'EVITER').length;
+
+      document.getElementById('count-buy').textContent = buy;
+      document.getElementById('count-watch').textContent = watch;
+      document.getElementById('count-avoid').textContent = avoid;
+    }
+
+    function renderCards() {
+      const container = document.getElementById('cards-container');
+      const searchText =
+        document.getElementById('search').value.trim().toLowerCase();
+
+      let filtered = allStocks.filter(item => {
+        const symbol = String(item.symbol || '').toLowerCase();
+        const company = getCompanyName(item).toLowerCase();
+
+        const matchesSearch =
+          !searchText ||
+          symbol.includes(searchText) ||
+          company.includes(searchText);
+
+        const matchesFilter =
+          currentFilter === 'ALL' ||
+          item.signalCalculated === currentFilter;
+
+        return matchesSearch && matchesFilter;
+      });
+
+      container.innerHTML = '';
+
+      if (filtered.length === 0) {
+        container.innerHTML =
+          '<div class="empty">Aucune action ne correspond à votre recherche.</div>';
+        return;
+      }
+
+      filtered.forEach(item => {
+        const score = item.scoreCalculated;
+        const liquidity = item.liquidityCalculated;
+        const variation = Number(item.variation_pct || 0);
+        const price = Number(item.last_price || 0);
+        const companyName = getCompanyName(item);
+
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        card.innerHTML = `
+          <div class="card-header">
+
+            <div class="company-block">
+
+              <div class="symbol-line">
+                <span class="rank">#${item.rank}</span>
+                <span class="symbol">${item.symbol || 'N/A'}</span>
+              </div>
+
+              ${
+                companyName
+                  ? `<div class="company-name">${companyName}</div>`
+                  : ''
+              }
+
+            </div>
+
+            <div class="signal ${getSignalClass(item.signalCalculated)}">
+              ${item.signalCalculated}
+            </div>
+
+          </div>
+
+          <div class="score ${getScoreClass(score)}">
+            ${score}/100
+          </div>
+
+          <div class="row">
+            <span>Cours</span>
+            <span class="value">
+              ${price.toLocaleString('fr-FR')} FCFA
+            </span>
+          </div>
+
+          <div class="row">
+            <span>Variation</span>
+            <span class="value ${variationClass(variation)}">
+              ${formatVariation(variation)}
+            </span>
+          </div>
+
+          <div class="row">
+            <span>Liquidité</span>
+            <span class="value">
+              <span class="liquidity-badge ${getLiquidityClass(liquidity)}">
+                ${liquidity}/100
+              </span>
+            </span>
+          </div>
+
+          <div class="history">
+            Historique en cours d'accumulation · Signal calculé automatiquement
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
     fetch('dashboard.json?ts=' + Date.now())
+
       .then(response => {
         if (!response.ok) {
           throw new Error('Impossible de charger dashboard.json');
         }
+
         return response.json();
       })
 
       .then(data => {
 
-        const container = document.getElementById('cards-container');
         const updated = document.getElementById('updated');
-
-        container.innerHTML = '';
-
-        if (data.updated_at) {
-          const date = new Date(data.updated_at);
-
-          updated.className = 'updated';
-          updated.textContent =
-            'Dernière mise à jour : ' +
-            date.toLocaleString('fr-FR');
-        }
 
         if (!Array.isArray(data.stocks)) {
           throw new Error('Format dashboard.json invalide');
         }
 
-        data.stocks.forEach(item => {
+        if (data.updated_at) {
+          const date = new Date(data.updated_at);
 
-          const score = Math.round(Number(item.trading_score || 0));
-          const liquidity = Math.round(Number(item.liquidity_score || 0));
-          const variation = Number(item.variation_pct || 0);
-          const price = Number(item.last_price || 0);
+          updated.textContent =
+            'Dernière mise à jour : ' +
+            date.toLocaleString('fr-FR');
+        } else {
+          updated.textContent = '';
+        }
 
-          const scoreClass =
-            score >= 75 ? 'green' : 'yellow';
+        allStocks = data.stocks
+          .map(item => {
 
-          const card = document.createElement('div');
+            const score =
+              Math.round(Number(item.trading_score || 0));
 
-          card.className = 'card';
+            const liquidity =
+              Math.round(Number(item.liquidity_score || 0));
 
-          card.innerHTML = `
-            <div class="symbol">
-              ${item.symbol}
-            </div>
+            return {
+              ...item,
+              scoreCalculated: score,
+              liquidityCalculated: liquidity,
+              signalCalculated: getSignal(score, liquidity)
+            };
+          })
 
-            <div class="score ${scoreClass}">
-              ${score}/100
-            </div>
+          .sort((a, b) => {
 
-            <div class="row">
-              <span>Cours</span>
-              <span>
-                ${price.toLocaleString('fr-FR')} FCFA
-              </span>
-            </div>
+            if (b.scoreCalculated !== a.scoreCalculated) {
+              return b.scoreCalculated - a.scoreCalculated;
+            }
 
-            <div class="row">
-              <span>Variation</span>
-              <span>
-                ${variation >= 0 ? '+' : ''}
-                ${variation.toFixed(2)} %
-              </span>
-            </div>
+            return b.liquidityCalculated - a.liquidityCalculated;
+          })
 
-            <div class="row">
-              <span>Liquidité</span>
-              <span>
-                ${liquidity}/100
-              </span>
-            </div>
+          .map((item, index) => ({
+            ...item,
+            rank: index + 1
+          }));
 
-            <div class="status">
-              ${
-                item.signal === 'HISTORIQUE_INSUFFISANT'
-                ? 'Historique insuffisant'
-                : item.signal
-              }
-            </div>
-          `;
-
-          container.appendChild(card);
-        });
+        updateSummary(allStocks);
+        renderCards();
       })
 
       .catch(error => {
 
         console.error(error);
 
+        document.getElementById('updated').textContent = '';
+
         document.getElementById('cards-container').innerHTML =
-          '<div class="error">Erreur de chargement des données.</div>';
+          '<div class="error">Erreur lors du chargement des données BRVM AI.</div>';
+      });
+
+    document
+      .getElementById('search')
+      .addEventListener('input', renderCards);
+
+    document
+      .querySelectorAll('.filter-btn')
+      .forEach(button => {
+
+        button.addEventListener('click', () => {
+
+          document
+            .querySelectorAll('.filter-btn')
+            .forEach(btn => btn.classList.remove('active'));
+
+          button.classList.add('active');
+
+          currentFilter = button.dataset.filter;
+
+          renderCards();
+        });
       });
   </script>
 
