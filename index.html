@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BRVM AI Dashboard</title>
+
   <style>
     body {
       margin: 0;
@@ -15,29 +16,36 @@
     .container {
       max-width: 900px;
       margin: auto;
-      padding: 20px;
+      padding: 22px;
     }
 
     h1 {
       margin-bottom: 6px;
-      font-size: 28px;
+      font-size: 30px;
     }
 
     .subtitle {
       color: #9ca3af;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
+      font-size: 18px;
     }
 
     .card {
       background: #151b2f;
       border-radius: 18px;
-      padding: 18px;
-      margin-bottom: 16px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .symbol {
+      font-size: 20px;
+      margin-bottom: 8px;
     }
 
     .score {
-      font-size: 32px;
+      font-size: 34px;
       font-weight: 700;
+      margin-bottom: 18px;
     }
 
     .green {
@@ -48,80 +56,150 @@
       color: #fbbf24;
     }
 
-    .red {
-      color: #f87171;
-    }
-
     .row {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
-      margin-top: 8px;
+      margin: 10px 0;
+      font-size: 17px;
       color: #d1d5db;
     }
 
     .status {
       display: inline-block;
-      margin-top: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #26304f;
+      margin-top: 14px;
+      padding: 8px 12px;
+      border-radius: 20px;
+      background: #29304f;
       font-size: 13px;
+      color: #e5e7eb;
+    }
+
+    .updated {
+      color: #6b7280;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    .error {
+      background: #3f1d2b;
+      padding: 16px;
+      border-radius: 12px;
+      margin-top: 20px;
     }
   </style>
 </head>
 
 <body>
+
   <div class="container">
 
     <h1>BRVM AI</h1>
-    <div class="subtitle">Trading & Investment Scanner</div>
+
+    <div class="subtitle">
+      Trading & Investment Scanner
+    </div>
+
+    <div id="updated"></div>
 
     <div id="cards-container"></div>
 
   </div>
-<script>
-fetch('dashboard.json')
-  .then(response => response.json())
-  .then(data => {
-    const container = document.getElementById('cards-container');
-    container.innerHTML = '';
 
-    data.forEach(item => {
-      const scoreClass = item.score >= 77 ? 'green' : 'yellow';
+  <script>
+    fetch('dashboard.json?ts=' + Date.now())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Impossible de charger dashboard.json');
+        }
+        return response.json();
+      })
 
-      const card = document.createElement('div');
-      card.className = 'card';
+      .then(data => {
 
-      card.innerHTML = `
-        <div>${item.symbol}</div>
-        <div class="score ${scoreClass}">${item.score}/100</div>
+        const container = document.getElementById('cards-container');
+        const updated = document.getElementById('updated');
 
-        <div class="row">
-          <span>Cours</span>
-          <span>${item.price} FCFA</span>
-        </div>
+        container.innerHTML = '';
 
-        <div class="row">
-          <span>Variation</span>
-          <span>${item.variation} %</span>
-        </div>
+        if (data.updated_at) {
+          const date = new Date(data.updated_at);
 
-        <div class="row">
-          <span>Liquidité</span>
-          <span>${item.liquidity}/100</span>
-        </div>
+          updated.className = 'updated';
+          updated.textContent =
+            'Dernière mise à jour : ' +
+            date.toLocaleString('fr-FR');
+        }
 
-        <div class="status">Données mises à jour automatiquement</div>
-      `;
+        if (!Array.isArray(data.stocks)) {
+          throw new Error('Format dashboard.json invalide');
+        }
 
-      container.appendChild(card);
-    });
-  })
-  .catch(error => {
-    console.error('Erreur dashboard:', error);
-  });
-</script>
+        data.stocks.forEach(item => {
+
+          const score = Math.round(Number(item.trading_score || 0));
+          const liquidity = Math.round(Number(item.liquidity_score || 0));
+          const variation = Number(item.variation_pct || 0);
+          const price = Number(item.last_price || 0);
+
+          const scoreClass =
+            score >= 75 ? 'green' : 'yellow';
+
+          const card = document.createElement('div');
+
+          card.className = 'card';
+
+          card.innerHTML = `
+            <div class="symbol">
+              ${item.symbol}
+            </div>
+
+            <div class="score ${scoreClass}">
+              ${score}/100
+            </div>
+
+            <div class="row">
+              <span>Cours</span>
+              <span>
+                ${price.toLocaleString('fr-FR')} FCFA
+              </span>
+            </div>
+
+            <div class="row">
+              <span>Variation</span>
+              <span>
+                ${variation >= 0 ? '+' : ''}
+                ${variation.toFixed(2)} %
+              </span>
+            </div>
+
+            <div class="row">
+              <span>Liquidité</span>
+              <span>
+                ${liquidity}/100
+              </span>
+            </div>
+
+            <div class="status">
+              ${
+                item.signal === 'HISTORIQUE_INSUFFISANT'
+                ? 'Historique insuffisant'
+                : item.signal
+              }
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+      })
+
+      .catch(error => {
+
+        console.error(error);
+
+        document.getElementById('cards-container').innerHTML =
+          '<div class="error">Erreur de chargement des données.</div>';
+      });
+  </script>
+
 </body>
 </html>
-
