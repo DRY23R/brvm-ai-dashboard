@@ -154,7 +154,7 @@
 
     .symbol {
       font-size: 21px;
-      font-weight: 500;
+      font-weight: 600;
     }
 
     .company-name {
@@ -188,10 +188,18 @@
       color: #f87171;
     }
 
-    .score {
-      font-size: 37px;
-      font-weight: 750;
-      margin: 10px 0 18px;
+    .global-label {
+      margin-top: 14px;
+      color: #8f98ab;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .global-score {
+      font-size: 40px;
+      font-weight: 800;
+      margin: 3px 0 16px;
       letter-spacing: -1px;
     }
 
@@ -205,6 +213,38 @@
 
     .score-low {
       color: #f87171;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .score-box {
+      background: #11172a;
+      border: 1px solid #242c49;
+      border-radius: 13px;
+      padding: 12px;
+    }
+
+    .score-box-label {
+      color: #8f98ab;
+      font-size: 11px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .score-box-value {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .confidence {
+      margin-top: 5px;
+      color: #737e96;
+      font-size: 11px;
     }
 
     .row {
@@ -257,12 +297,37 @@
       color: #f87171;
     }
 
+    .fundamentals {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid #242c49;
+    }
+
+    .fundamentals-title {
+      color: #8f98ab;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+
+    .small-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin: 7px 0;
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
     .history {
       margin-top: 15px;
       padding-top: 13px;
       border-top: 1px solid #242c49;
       color: #737e96;
       font-size: 12px;
+      line-height: 1.5;
     }
 
     .empty,
@@ -328,7 +393,7 @@
         id="search"
         class="search"
         type="search"
-        placeholder="Rechercher une action…"
+        placeholder="Rechercher une action ou une entreprise…"
         autocomplete="off"
       >
 
@@ -361,9 +426,9 @@
     <div id="cards-container"></div>
 
     <div class="footer-note">
-      Les signaux BRVM AI sont des indicateurs quantitatifs automatisés
-      basés sur les données disponibles. Ils ne constituent pas un conseil
-      financier personnalisé.
+      BRVM AI combine des indicateurs de marché et des données fondamentales.
+      Les scores sont calculés automatiquement à partir des données disponibles
+      et ne constituent pas un conseil financier personnalisé.
     </div>
 
   </div>
@@ -372,16 +437,18 @@
     let allStocks = [];
     let currentFilter = 'ALL';
 
-    function getSignal(score, liquidity) {
-      if (score >= 75 && liquidity >= 50) {
-        return 'ACHAT';
-      }
+    function safeNumber(value, fallback = 0) {
+      const number = Number(value);
+      return Number.isFinite(number) ? number : fallback;
+    }
 
-      if (score >= 60) {
-        return 'SURVEILLER';
-      }
+    function getSignal(item) {
+      const signal = String(item.signal || '').toUpperCase();
 
-      return 'EVITER';
+      if (signal === 'ACHAT') return 'ACHAT';
+      if (signal === 'EVITER') return 'EVITER';
+
+      return 'SURVEILLER';
     }
 
     function getSignalClass(signal) {
@@ -403,14 +470,14 @@
     }
 
     function formatVariation(value) {
-      const number = Number(value || 0);
+      const number = safeNumber(value);
       const sign = number > 0 ? '+' : '';
 
       return `${sign}${number.toFixed(2)} %`;
     }
 
     function variationClass(value) {
-      const number = Number(value || 0);
+      const number = safeNumber(value);
 
       if (number > 0) return 'positive';
       if (number < 0) return 'negative';
@@ -418,20 +485,61 @@
       return 'neutral';
     }
 
-    function getCompanyName(item) {
-      return (
-        item.company_name ||
-        item.company ||
-        item.name ||
-        item.security_name ||
-        ''
-      );
+    function formatPrice(value) {
+      const number = safeNumber(value);
+
+      return `${Math.round(number).toLocaleString('fr-FR')} FCFA`;
+    }
+
+    function formatScore(value) {
+      const number = Number(value);
+
+      if (!Number.isFinite(number)) {
+        return 'N/D';
+      }
+
+      return `${Math.round(number)}/100`;
+    }
+
+    function formatPER(value) {
+      const number = Number(value);
+
+      if (!Number.isFinite(number)) return 'N/D';
+
+      return number.toFixed(2);
+    }
+
+    function formatMarketCap(value) {
+      const number = Number(value);
+
+      if (!Number.isFinite(number) || number <= 0) {
+        return 'N/D';
+      }
+
+      if (number >= 1000000000000) {
+        return `${(number / 1000000000000).toFixed(2)} T FCFA`;
+      }
+
+      if (number >= 1000000000) {
+        return `${(number / 1000000000).toFixed(1)} Md FCFA`;
+      }
+
+      if (number >= 1000000) {
+        return `${(number / 1000000).toFixed(1)} M FCFA`;
+      }
+
+      return `${Math.round(number).toLocaleString('fr-FR')} FCFA`;
     }
 
     function updateSummary(stocks) {
-      const buy = stocks.filter(item => item.signalCalculated === 'ACHAT').length;
-      const watch = stocks.filter(item => item.signalCalculated === 'SURVEILLER').length;
-      const avoid = stocks.filter(item => item.signalCalculated === 'EVITER').length;
+      const buy =
+        stocks.filter(item => item.signalCalculated === 'ACHAT').length;
+
+      const watch =
+        stocks.filter(item => item.signalCalculated === 'SURVEILLER').length;
+
+      const avoid =
+        stocks.filter(item => item.signalCalculated === 'EVITER').length;
 
       document.getElementById('count-buy').textContent = buy;
       document.getElementById('count-watch').textContent = watch;
@@ -439,43 +547,80 @@
     }
 
     function renderCards() {
-      const container = document.getElementById('cards-container');
+      const container =
+        document.getElementById('cards-container');
+
       const searchText =
-        document.getElementById('search').value.trim().toLowerCase();
+        document
+          .getElementById('search')
+          .value
+          .trim()
+          .toLowerCase();
 
-      let filtered = allStocks.filter(item => {
-        const symbol = String(item.symbol || '').toLowerCase();
-        const company = getCompanyName(item).toLowerCase();
+      const filtered =
+        allStocks.filter(item => {
+          const symbol =
+            String(item.symbol || '').toLowerCase();
 
-        const matchesSearch =
-          !searchText ||
-          symbol.includes(searchText) ||
-          company.includes(searchText);
+          const company =
+            String(item.name || '').toLowerCase();
 
-        const matchesFilter =
-          currentFilter === 'ALL' ||
-          item.signalCalculated === currentFilter;
+          const matchesSearch =
+            !searchText ||
+            symbol.includes(searchText) ||
+            company.includes(searchText);
 
-        return matchesSearch && matchesFilter;
-      });
+          const matchesFilter =
+            currentFilter === 'ALL' ||
+            item.signalCalculated === currentFilter;
+
+          return matchesSearch && matchesFilter;
+        });
 
       container.innerHTML = '';
 
       if (filtered.length === 0) {
         container.innerHTML =
           '<div class="empty">Aucune action ne correspond à votre recherche.</div>';
+
         return;
       }
 
       filtered.forEach(item => {
-        const score = item.scoreCalculated;
-        const liquidity = item.liquidityCalculated;
-        const variation = Number(item.variation_pct || 0);
-        const price = Number(item.last_price || 0);
-        const companyName = getCompanyName(item);
+        const globalScore =
+          safeNumber(item.global_score);
 
-        const card = document.createElement('div');
+        const tradingScore =
+          safeNumber(item.trading_score);
+
+        const fundamentalScore =
+          Number(item.fundamental_score);
+
+        const fundamentalConfidence =
+          safeNumber(item.fundamental_confidence);
+
+        const liquidity =
+          safeNumber(item.liquidity_score);
+
+        const variation =
+          safeNumber(item.variation_pct);
+
+        const historyPoints =
+          safeNumber(item.history_points);
+
+        const card =
+          document.createElement('div');
+
         card.className = 'card';
+
+        const fundamentalAvailable =
+          Number.isFinite(fundamentalScore) &&
+          fundamentalConfidence > 0;
+
+        const historyText =
+          item.history_ready
+            ? `Historique suffisant · ${historyPoints} observations`
+            : `Historique en accumulation · ${historyPoints} observation${historyPoints > 1 ? 's' : ''}`;
 
         card.innerHTML = `
           <div class="card-header">
@@ -487,11 +632,9 @@
                 <span class="symbol">${item.symbol || 'N/A'}</span>
               </div>
 
-              ${
-                companyName
-                  ? `<div class="company-name">${companyName}</div>`
-                  : ''
-              }
+              <div class="company-name">
+                ${item.name || ''}
+              </div>
 
             </div>
 
@@ -501,14 +644,54 @@
 
           </div>
 
-          <div class="score ${getScoreClass(score)}">
-            ${score}/100
+          <div class="global-label">
+            Score global
+          </div>
+
+          <div class="global-score ${getScoreClass(globalScore)}">
+            ${formatScore(globalScore)}
+          </div>
+
+          <div class="score-grid">
+
+            <div class="score-box">
+              <div class="score-box-label">
+                Trading
+              </div>
+
+              <div class="score-box-value ${getScoreClass(tradingScore)}">
+                ${formatScore(tradingScore)}
+              </div>
+            </div>
+
+            <div class="score-box">
+              <div class="score-box-label">
+                Fondamental
+              </div>
+
+              <div class="score-box-value">
+                ${
+                  fundamentalAvailable
+                    ? formatScore(fundamentalScore)
+                    : 'N/D'
+                }
+              </div>
+
+              <div class="confidence">
+                ${
+                  fundamentalAvailable
+                    ? `Confiance : ${Math.round(fundamentalConfidence)} %`
+                    : 'Données insuffisantes'
+                }
+              </div>
+            </div>
+
           </div>
 
           <div class="row">
             <span>Cours</span>
             <span class="value">
-              ${price.toLocaleString('fr-FR')} FCFA
+              ${formatPrice(item.last_price)}
             </span>
           </div>
 
@@ -523,13 +706,53 @@
             <span>Liquidité</span>
             <span class="value">
               <span class="liquidity-badge ${getLiquidityClass(liquidity)}">
-                ${liquidity}/100
+                ${Math.round(liquidity)}/100
               </span>
             </span>
           </div>
 
+          <div class="fundamentals">
+
+            <div class="fundamentals-title">
+              Données fondamentales
+            </div>
+
+            <div class="small-row">
+              <span>PER</span>
+              <span>${formatPER(item.per)}</span>
+            </div>
+
+            <div class="small-row">
+              <span>Performance YTD</span>
+              <span class="${variationClass(item.ytd_change)}">
+                ${formatVariation(item.ytd_change)}
+              </span>
+            </div>
+
+            <div class="small-row">
+              <span>Capitalisation</span>
+              <span>${formatMarketCap(item.market_cap)}</span>
+            </div>
+
+            <div class="small-row">
+              <span>Valorisation</span>
+              <span>${formatScore(item.valuation_score)}</span>
+            </div>
+
+            <div class="small-row">
+              <span>Dividende</span>
+              <span>${formatScore(item.dividend_score)}</span>
+            </div>
+
+            <div class="small-row">
+              <span>Score YTD</span>
+              <span>${formatScore(item.ytd_score)}</span>
+            </div>
+
+          </div>
+
           <div class="history">
-            Historique en cours d'accumulation · Signal calculé automatiquement
+            ${historyText} · Signal calculé automatiquement
           </div>
         `;
 
@@ -541,22 +764,27 @@
 
       .then(response => {
         if (!response.ok) {
-          throw new Error('Impossible de charger dashboard.json');
+          throw new Error(
+            'Impossible de charger dashboard.json'
+          );
         }
 
         return response.json();
       })
 
       .then(data => {
-
-        const updated = document.getElementById('updated');
+        const updated =
+          document.getElementById('updated');
 
         if (!Array.isArray(data.stocks)) {
-          throw new Error('Format dashboard.json invalide');
+          throw new Error(
+            'Format dashboard.json invalide'
+          );
         }
 
         if (data.updated_at) {
-          const date = new Date(data.updated_at);
+          const date =
+            new Date(data.updated_at);
 
           updated.textContent =
             'Dernière mise à jour : ' +
@@ -565,71 +793,85 @@
           updated.textContent = '';
         }
 
-        allStocks = data.stocks
-          .map(item => {
+        allStocks =
+          data.stocks
+            .map(item => {
+              return {
+                ...item,
 
-            const score =
-              Math.round(Number(item.trading_score || 0));
+                signalCalculated:
+                  getSignal(item)
+              };
+            })
 
-            const liquidity =
-              Math.round(Number(item.liquidity_score || 0));
+            .sort((a, b) => {
+              const scoreA =
+                safeNumber(a.global_score);
 
-            return {
+              const scoreB =
+                safeNumber(b.global_score);
+
+              if (scoreB !== scoreA) {
+                return scoreB - scoreA;
+              }
+
+              return (
+                safeNumber(b.trading_score) -
+                safeNumber(a.trading_score)
+              );
+            })
+
+            .map((item, index) => ({
               ...item,
-              scoreCalculated: score,
-              liquidityCalculated: liquidity,
-              signalCalculated: getSignal(score, liquidity)
-            };
-          })
-
-          .sort((a, b) => {
-
-            if (b.scoreCalculated !== a.scoreCalculated) {
-              return b.scoreCalculated - a.scoreCalculated;
-            }
-
-            return b.liquidityCalculated - a.liquidityCalculated;
-          })
-
-          .map((item, index) => ({
-            ...item,
-            rank: index + 1
-          }));
+              rank: index + 1
+            }));
 
         updateSummary(allStocks);
         renderCards();
       })
 
       .catch(error => {
-
         console.error(error);
 
-        document.getElementById('updated').textContent = '';
+        document
+          .getElementById('updated')
+          .textContent = '';
 
-        document.getElementById('cards-container').innerHTML =
+        document
+          .getElementById('cards-container')
+          .innerHTML =
           '<div class="error">Erreur lors du chargement des données BRVM AI.</div>';
       });
 
     document
       .getElementById('search')
-      .addEventListener('input', renderCards);
+      .addEventListener(
+        'input',
+        renderCards
+      );
 
     document
       .querySelectorAll('.filter-btn')
       .forEach(button => {
 
-        button.addEventListener('click', () => {
+        button.addEventListener(
+          'click',
+          () => {
 
-          document
-            .querySelectorAll('.filter-btn')
-            .forEach(btn => btn.classList.remove('active'));
+            document
+              .querySelectorAll('.filter-btn')
+              .forEach(btn => {
+                btn.classList.remove('active');
+              });
 
-          button.classList.add('active');
+            button.classList.add('active');
 
-          currentFilter = button.dataset.filter;
+            currentFilter =
+              button.dataset.filter;
 
-          renderCards();
-        });
+            renderCards();
+          }
+        );
       });
   </script>
 
