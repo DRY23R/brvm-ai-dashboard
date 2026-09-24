@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-24T09:27:24+00:00",
+  "updated_at": "2026-09-24T09:41:49+00:00",
   "count": 48,
   "stocks": [
     {
@@ -24,7 +24,7 @@
       "per": 11.66,
       "ytd_change": 0.27,
       "market_cap": 1181755513350.0,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "SURVEILLER"
     },
@@ -50,7 +50,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -76,7 +76,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -102,7 +102,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -128,7 +128,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -154,7 +154,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -180,7 +180,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -206,7 +206,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -232,7 +232,7 @@
       "per": 9.91,
       "ytd_change": 0.57,
       "market_cap": 4100000000000.0,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -258,7 +258,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -284,7 +284,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -310,7 +310,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -336,7 +336,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -362,7 +362,7 @@
       "per": 8.77,
       "ytd_change": 0.55,
       "market_cap": 114667392000.0,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -388,7 +388,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -414,7 +414,7 @@
       "per": 7.68,
       "ytd_change": -0.05,
       "market_cap": 191685037500.0,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -440,7 +440,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -466,7 +466,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -492,7 +492,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -518,7 +518,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -544,7 +544,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -570,7 +570,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -596,7 +596,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -622,7 +622,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -648,7 +648,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -674,7 +674,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -700,7 +700,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -726,7 +726,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 2,
+      "history_points": 3,
       "history_ready": false,
       "signal": "EVITER"
     },
@@ -752,7 +752,7 @@
       "per": 18.32,
       "ytd_change": 0.43,
       "market_cap": 3073369140000.0,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -778,7 +778,7 @@
       "per": 18.26,
       "ytd_change": 0.52,
       "market_cap": 123795260000.0,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -804,7 +804,7 @@
       "per": 8.07,
       "ytd_change": 0.0,
       "market_cap": 125220459600.0,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -830,7 +830,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -856,7 +856,7 @@
       "per": 17.37,
       "ytd_change": 0.36,
       "market_cap": 320020800000.0,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -882,7 +882,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -908,7 +908,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -934,7 +934,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -960,7 +960,7 @@
       "per": 14.57,
       "ytd_change": 0.05,
       "market_cap": 924850080000.0,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -986,7 +986,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -1012,7 +1012,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -1038,7 +1038,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -1064,7 +1064,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -1090,7 +1090,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -1116,7 +1116,7 @@
       "per": 15.31,
       "ytd_change": 0.48,
       "market_cap": 851000000000.0,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -1142,7 +1142,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -1168,7 +1168,7 @@
       "per": 13.11,
       "ytd_change": 0.13,
       "market_cap": 190400000000.0,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -1194,7 +1194,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -1220,7 +1220,7 @@
       "per": 20.68,
       "ytd_change": 0.28,
       "market_cap": 187940376000.0,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     },
@@ -1246,7 +1246,7 @@
       "per": null,
       "ytd_change": null,
       "market_cap": null,
-      "history_points": 764,
+      "history_points": 765,
       "history_ready": true,
       "signal": "EVITER"
     }
